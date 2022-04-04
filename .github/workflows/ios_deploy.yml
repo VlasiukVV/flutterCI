@@ -49,12 +49,10 @@ jobs:
 
       - name: Restore packages
         uses: flutter pub get
-      
+
       - name: Build Flutter
         uses: flutter build ios --release --no-codesign
-
-
-
+     
       # Runs a set of commands using the runners shell
       # - name: Run a multi-line script
       #   run: |
