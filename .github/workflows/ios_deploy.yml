@@ -60,10 +60,3 @@ jobs:
       - name: Build xArchive
         run: |
           xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release DEVELOPMENT_TEAM=86Y67F9SF6 -sdk 'iphoneos' -destination 'generic/platform=iOS' -archivePath build-output/app.xcarchive PROVISIONING_PROFILE=a97d83e9-8ded-4ca9-8992-95b4cf035148 clean archive CODE_SIGN_IDENTITY="Apple Distribution: Sigh LLC (86Y67F9SF6)"
-
-     
-      # Runs a set of commands using the runners shell
-      # - name: Run a multi-line script
-      #   run: |
-      #     echo Add other actions to build,
-      #     echo test, and deploy your project.
