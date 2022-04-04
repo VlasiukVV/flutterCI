@@ -1,38 +1,46 @@
+# This is a basic workflow to help you get started with Actions
+
 name: NoiseAware iOS build 
 
+# Controls when the workflow will run
 # on:
 #   push:
 #     tags:
 #     - 'v*'
-# Triggers the workflow on push or pull request events but only for the main branch
 on:
   push:
-    branches: [main]
+    branches: [ main ]
 
 jobs:
   build_ios:
     runs-on: macos-latest
 
-  
-  steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - name: Checkout the code
-      uses: actions/checkout@v2
+    steps:
+      # Check code
+      - name: Checkout the code
+        uses: actions/checkout@v2
 
-    - name: Install Apple Certificate
-      uses: apple-actions/import-codesign-certs@v1
-      with:
-       p12-file-base64: ${{ secrets.P12_BASE64 }}
-       p12-password: ${{ secrets.P12_PASSWORD }}
-    
-    - name: Install the provisioning profile
-      env:
-        PROVISIONING_CERTIFICATE_BASE64: ${{ secrets.PROVISIONING_PROFILE_BASE64 }}
-      run: |
-        PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+      # Install iOS certificate from secreat store
+      - name: Install Apple Certificate
+        uses: apple-actions/import-codesign-certs@v1
+        with:
+          p12-file-base64: ${{ secrets.P12_BASE64 }}
+          p12-password: ${{ secrets.P12_PASSWORD }}
 
-        echo -n "$PROVISIONING_CERTIFICATE_BASE64" | base64 --decode --output $PP_PATH
+      # Install provision profile from secreat store
+      - name: Run a multi-line script
+        env:
+          PROVISIONING_CERTIFICATE_BASE64: ${{ secrets.PROVISIONING_PROFILE_BASE64 }}
+        run: |
+          PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+          echo -n "$PROVISIONING_CERTIFICATE_BASE64" | base64 --decode --output $PP_PATH
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
-        mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-        cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
+
+      # Runs a set of commands using the runners shell
+      # - name: Run a multi-line script
+      #   run: |
+      #     echo Add other actions to build,
+      #     echo test, and deploy your project.
