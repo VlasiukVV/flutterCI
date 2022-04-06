@@ -7,9 +7,9 @@ name: NoiseAware iOS build
 #   push:
 #     tags:
 #     - 'v*'
-on:
-  push:
-    branches: [ main ]
+# on:
+#   push:
+#     branches: [ main ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
