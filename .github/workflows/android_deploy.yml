@@ -50,19 +50,11 @@ jobs:
       - name: Build Flutter
         run: flutter build appbundle --release
 
-      #  # Xcode part
-      # - name: Build resolve Swift dependencies
-      #   run: xcodebuild -resolvePackageDependencies -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release
-
-      # - name: Build xArchive
-      #   run: |
-      #     xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release DEVELOPMENT_TEAM=86Y67F9SF6 -sdk 'iphoneos' -destination 'generic/platform=iOS' -archivePath build-output/app.xcarchive PROVISIONING_PROFILE=a97d83e9-8ded-4ca9-8992-95b4cf035148 clean archive CODE_SIGN_IDENTITY="Apple Distribution: Sigh LLC (86Y67F9SF6)"
+      - name: Sign Android App Bundle
+        run: jarsigner -keystore $RUNNER_TEMP/my_production.keystore -storepass ${{ secrets.KEYSTORE_PASSWORD }} -keypass ${{ secrets.KEYSTORE_PASSWORD_ALIAS }} -sigalg SHA256withRSA -digestalg SHA-256 -signedjar build/app/outputs/bundle/release/app-release-signed.aab build/app/outputs/bundle/release/*.aab my_production_alias
       
-      # - name: Export ipa
-      #   run: xcodebuild -exportArchive -archivePath build-output/app.xcarchive -exportPath build-output/ios -exportOptionsPlist ios/ExportOptions.plist
-      
-      # - name: Publish iOS Artefacts
-      #   uses: actions/upload-artifact@v1
-      #   with:
-      #     name: release-ios
-      #     path: build-output/ios
+      - name: Publish Android Artefacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: release-aab-signed
+          path: build/app/outputs/bundle/release/app-release-signed.aab
