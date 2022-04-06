@@ -3,10 +3,10 @@
 name: NoiseAware iOS build 
 
 # Controls when the workflow will run
-# on:
-#   push:
-#     tags:
-#     - 'v*'
+on:
+  push:
+    tags:
+    - 'v*'
 # on:
 #   push:
 #     branches: [ main ]
